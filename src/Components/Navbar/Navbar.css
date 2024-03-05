@@ -1,0 +1,24 @@
+.nav-div {
+    background-color: rgb(60,109,121);
+}
+.signup-btn{
+    background-color: rgb(249,174,101);
+    transition: background-color 0.3s ease-in;
+}
+.signup-btn:hover{
+    background-color: rgb(255, 123, 0) !important;
+}
+.signin-btn{
+    border: 1px solid rgb(249,174,101);
+    transition: background-color 0.3s ease-in;
+}
+.signin-btn:hover {
+    background-color: rgb(249,174,101);
+}
+.signout-btn{
+    background-color: rgb(255, 123, 0);
+    transition: background-color 0.3s ease-in;
+}
+.signout-btn:hover{
+    background-color: rgb(226, 54, 23) !important;
+}

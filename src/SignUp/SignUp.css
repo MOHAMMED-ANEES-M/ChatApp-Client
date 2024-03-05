@@ -1,0 +1,29 @@
+.signup {
+    background-color: rgb(60,109,121);
+}
+h1 {
+    color: rgb(255, 255, 255);
+}
+input {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: rgb(60,109,121) !important;
+    border: 1px solid rgb(249,174,101);
+    color: white;
+}
+input:focus {
+    outline: none;
+}
+.signup1-btn {
+    cursor: pointer;
+    transition: background-color 0.3s ease-in
+}
+.signup1-btn:hover {
+    background-color: rgb(249,174,101) !important;
+}
+.signup span {
+    color: rgb(249,174,101);
+}
+.signup span:hover {
+    font-style: italic;
+}

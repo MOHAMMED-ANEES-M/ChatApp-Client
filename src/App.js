@@ -1,25 +1,36 @@
-import logo from './logo.svg';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Login from './Login';
+import SingnUp from './SignUp/SingnUp';
+import UsersList from './Pages/UsersList/UsersList';
+import Navbar from './Components/Navbar/Navbar';
+import Profile from './Pages/Profile/Profile';
+import { UserProvider } from './context/UserContext';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <UserProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<SingnUp />} />
+          <Route path="login" element={<Login />} />
+          <Route path="userslist" element={<UsersList />} >
+            <Route path="profile" element={<Profile />} />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    </UserProvider>
+
     </div>
   );
 }
 
 export default App;
+
+
+
+//97d8c4

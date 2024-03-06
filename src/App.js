@@ -6,6 +6,7 @@ import UsersList from './Pages/UsersList/UsersList';
 import Navbar from './Components/Navbar/Navbar';
 import Profile from './Pages/Profile/Profile';
 import { UserProvider } from './context/UserContext';
+import Index from './Pages/Index';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<SingnUp />} />
           <Route path="login" element={<Login />} />
           <Route path="userslist" element={<UsersList />} >
+            <Route index element={<Index />} />
             <Route path="profile" element={<Profile />} />
           </Route>
         </Route>

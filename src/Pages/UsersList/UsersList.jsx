@@ -3,17 +3,19 @@ import axios from 'axios';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { BsGrid1X2Fill } from "react-icons/bs";
 import './UsersList.css'
+import { useUser } from '../../context/UserContext';
 
 
 const UsersList = () => {
   const [usersData, setUsersData] = useState(['']);
-  const [profileData, setProfileData] = useState('');
+  // const [profileData, setProfileData] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const userListRef = useRef(null); 
   const navigate = useNavigate()
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
+  const {userData, setFetchAgain} = useUser()
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -27,6 +29,8 @@ const UsersList = () => {
     if (!token) {
       return navigate('/login')
     }
+    setFetchAgain(true)
+    
     const fetchUsersData = async () => {
       try {
         console.log('fdvd');
@@ -37,8 +41,8 @@ const UsersList = () => {
         });
         const filteredUsers = users.data.filter(user => user._id !== userId);
         setUsersData(filteredUsers);
-        const profile = users.data.filter(user => user._id === userId);
-        setProfileData(profile);
+        // const profile = users.data.filter(user => user._id === userId);
+        // setProfileData(profile);
       } catch (err) {
         console.log(err);
       }
@@ -71,9 +75,9 @@ const UsersList = () => {
       <div className={`h-full p-3 space-y-2 w-2/3 sm:w-96 dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
 
     <div class="flex items-center p-5 space-x-4 fixed top-0 left-0 border-b w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
-      <img src="https://source.unsplash.com/100x100/?portrait" alt="profile" class="w-12 h-12 rounded-full dark:bg-gray-500"/>
+      <img src={userData?.image} alt="profile" class="w-12 h-12 rounded-full dark:bg-gray-500 object-cover"/>
       <div>
-        <h2 class="text-lg ">{profileData[0]?.firstname} {profileData[0]?.lastname}</h2>
+        <h2 class="text-lg ">{userData?.firstname} {userData?.lastname}</h2>
         <span class="flex items-center space-x-1">
           <Link to='profile'><a rel="noopener noreferrer" href="#" class="text-xs hover:underline dark:text-gray-400">View profile</a></Link>
         </span>

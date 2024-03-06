@@ -12,7 +12,9 @@ export const useUser = () => {
 
 // UserProvider component
 export const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState('');
+  const [refresh, setRefresh] = useState(false);
+  const [fetchAgain, setFetchAgain] = useState(false); 
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
 
@@ -31,18 +33,23 @@ export const UserProvider = ({ children }) => {
       }
     };
 
-    if (token && userId) {
-      fetchUserData();
-    } 
+    const initializeUserData = async () => {
+      if (token && userId) {
+        await fetchUserData();
+      }
+    };
+  
+    initializeUserData();
 
-  }, [token, userId]);
+  }, [token, userId, refresh, fetchAgain]);
 
   const updateUser = (newUserData) => {
     setUserData(newUserData);
+    setRefresh(!refresh)
   };
 
   return (
-    <UserContext.Provider value={{ userData, updateUser }}>
+    <UserContext.Provider value={{ userData, updateUser, setFetchAgain }}>
       {children}
     </UserContext.Provider>
   );

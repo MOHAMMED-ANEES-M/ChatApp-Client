@@ -2,20 +2,16 @@ import React, { useState } from 'react';
 import { FaUserEdit } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
-const EditPopup = ({ onClose, onSave, initialValue }) => {
-  const [editedValue, setEditedValue] = useState({
-    password: '',
-    newpassword: '',
-    confnewpassword: ''
-  });
+const EditPopup = ({ onClose, onSave }) => {
+  const [editedValue, setEditedValue] = useState('');
 
-  const handleSavePass = () => {
+  const handleSaveEmail = () => {
     onSave(editedValue);
     onClose();
   };
 
   const handleChange = (e) => {
-    setEditedValue({...editedValue,[e.target.name]:e.target.value})
+    setEditedValue(e.target.value)
   }
 
   return (
@@ -33,7 +29,7 @@ const EditPopup = ({ onClose, onSave, initialValue }) => {
           </label> */}
           <input
             className="popup-input w-full p-2 bg-white border border-gray-300 rounded mb-5 placeholder:text-sm"
-            name='confnewpassword' type='password' placeholder='Enter your new email address...'
+            name='email' type='email' placeholder='Enter your new email address...'
             onChange={handleChange}
           />
           <p className='text-sm text-red-500 text-center'>OTP verification required to change email address</p>
@@ -47,7 +43,7 @@ const EditPopup = ({ onClose, onSave, initialValue }) => {
         <button
           className=" text-white py-2 px-4 rounded "
           style={{backgroundColor:'rgb(60,109,121)'}}
-          onClick={handleSavePass}>Save</button>
+          onClick={handleSaveEmail}>Save</button>
         </div>
       </div>
     </div>

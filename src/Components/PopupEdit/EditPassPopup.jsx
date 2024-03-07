@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaUserEdit } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
-const EditPopup = ({ onClose, onSave, initialValue }) => {
+const EditPopup = ({ onClose, onSave }) => {
   const [editedValue, setEditedValue] = useState({
     password: '',
     newpassword: '',

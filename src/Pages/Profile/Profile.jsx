@@ -46,6 +46,7 @@ const Profile = () => {
         }
       })
       if (response.data.success) {
+        successToast("Profile updation successfull")
         console.log('updated profile res',response);
         updateUser({ ...userData, editedValue });
       }
@@ -53,7 +54,8 @@ const Profile = () => {
     }catch(err){
       setIsEditing(true)
       console.log(err);
-      errorToast(err && err.response && err.response.data.message)    }
+      errorToast(err && err.response && err.response.data.message)   
+    }
   };
 
   const handleSavePass = async (editedValue) => {
@@ -80,6 +82,31 @@ const Profile = () => {
 
     } finally {
       setIsPassEditing(true)
+    }
+
+  };
+
+  const handleSaveEmail = async (editedValue) => {
+    try{
+      console.log('email',editedValue);
+      let sendOTP = await axios.post('http://localhost:5000/api/users/send-OTP',{email: editedValue},{
+        headers: {
+          Authorization: token
+        }
+      })
+      if (sendOTP) {
+        console.log('sendOTP',sendOTP);
+        setIsEmailEditing(false)
+        successToast('OTP sent successfully')
+      }      
+      
+    }catch(err){
+      setIsEmailEditing(true)
+      console.log(err);
+      errorToast(err && err.response && err.response.data.message)
+
+    } finally {
+      setIsEmailEditing(false)
     }
 
   };
@@ -182,7 +209,7 @@ const Profile = () => {
     {isEmailEditing && (
             <EditEmailPopup
               onClose={() => setIsEmailEditing(false)}
-              onSave={handleSavePass}
+              onSave={handleSaveEmail}
               // initialValue={userData}
             />
           )}

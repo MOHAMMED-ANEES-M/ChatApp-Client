@@ -4,6 +4,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { BsGrid1X2Fill } from "react-icons/bs";
 import './UsersList.css'
 import { useUser } from '../../context/UserContext';
+import profile from '../../assets/images.png'
 
 
 const UsersList = () => {
@@ -75,8 +76,12 @@ const UsersList = () => {
       <div className={`h-full p-3 space-y-2 w-2/3 sm:w-96 dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
 
     <div class="flex items-center p-5 space-x-4 fixed top-0 left-0 border-b w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
+    { userData.image ? (
       <img src={userData?.image} alt="profile" class="w-12 h-12 rounded-full dark:bg-gray-500 object-cover"/>
-      <div>
+      ) : (
+        <img src={profile} alt="profile" class="w-12 h-12 rounded-full dark:bg-gray-500 object-cover"/>
+    )}
+        <div>
         <h2 class="text-lg ">{userData?.firstname} {userData?.lastname}</h2>
         <span class="flex items-center space-x-1">
           <Link to='profile'><a rel="noopener noreferrer" href="#" class="text-xs hover:underline dark:text-gray-400">View profile</a></Link>

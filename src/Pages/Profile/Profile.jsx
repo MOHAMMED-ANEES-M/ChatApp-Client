@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { HiMail } from "react-icons/hi";
 import { FaCircleInfo } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
-import profile from '../../assets/dp.jpg'
+import profile from '../../assets/images.png'
 import axios from 'axios';
-import { errorToast } from '../../Components/Toast';
+import { errorToast, successToast, warnToast } from '../../Components/Toast';
 import ImageUpdatePopup from '../../Components/PopupEdit/ImageUpdatePopup';
 import EditPopup from '../../Components/PopupEdit/EditPopup';
+import EditPassPopup from '../../Components/PopupEdit/EditPassPopup';
+import EditEmailPopup from '../../Components/PopupEdit/EditEmailPopup';
 
 
 
@@ -17,6 +19,8 @@ const Profile = () => {
   
   const [image, setImage] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isPassEditing, setIsPassEditing] = useState(false);
+  const [isEmailEditing, setIsEmailEditing] = useState(false);
   const [showImageConfirmation, setShowImageConfirmation] = useState(false);
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
@@ -26,6 +30,13 @@ const Profile = () => {
     setIsEditing(true);
   };
 
+  const handleEditPass = () => {
+    setIsPassEditing(true);
+  };
+
+  const handleEditEmail = () => {
+    setIsEmailEditing(true);
+  };
 
   const handleSave = async (editedValue) => {
     try{
@@ -40,13 +51,42 @@ const Profile = () => {
       }
       
     }catch(err){
+      setIsEditing(true)
       console.log(err);
+      errorToast(err && err.response && err.response.data.message)    }
+  };
+
+  const handleSavePass = async (editedValue) => {
+    try{
+      
+      // const { password, newpassword, confnewpassword } = editedValue
+
+      const response = await axios.put('http://localhost:5000/api/users/change-password',editedValue,{
+        headers: {
+          Authorization: token
+        }
+      })
+      if (response.data.success) {
+        console.log('updated profile res',response);
+        updateUser({ ...userData, editedValue });
+        successToast('Password Changed Successfully')
+        setIsPassEditing(false)
+      }
+      
+    }catch(err){
+      setIsPassEditing(true)
+      console.log(err);
+      errorToast(err && err.response && err.response.data.message)
+
+    } finally {
+      setIsPassEditing(true)
     }
+
   };
 
   const handleImage = async (e) => {
     try {
-      console.log('sdd');
+      console.log('handleImage');
       const file = e.target.files[0];
 
     if (file) {
@@ -78,11 +118,16 @@ const Profile = () => {
     
   },[token])
 
+
   return (
     <div>
 
       <div className='w-1/6 m-auto mt-20 relative'>
-        <img src={userData?.image} alt='profile' class="w-40 h-40 rounded-full dark:bg-gray-500 object-cover "/>
+        { userData.image ? (
+          <img src={userData?.image} alt='profile' class="w-40 h-40 rounded-full dark:bg-gray-500 object-cover "/>
+        ) : (
+          <img src={profile} alt='profile' class="w-40 h-40 rounded-full dark:bg-gray-500 object-cover "/>
+        )}
         <div style={{ backgroundColor: 'rgb(60,109,121)' }} className='w-fit p-3 rounded-full absolute top-3/4 left-2/4'>
           <label htmlFor="fileInput" className="file-input-label">
           <span ><FaUserEdit className='w-6 h-6 text-white cursor-pointer'/></span>
@@ -93,28 +138,29 @@ const Profile = () => {
       </div>
 
       <p className='font-semibold text-lg text-center mt-10'>{userData?.firstname} {userData?.lastname}</p>
-      <div className='w-1/4 m-auto mt-10'>
+      <div className='w-1/6 m-auto mt-10'>
         <div className='flex gap-5'>
           <p className='flex items-center gap-5 mb-5 min-w-60'>
+          <FaCircleInfo
+            className='w-4 h-4'
+            style={{ color: 'rgb(60,109,121)' }}
+          />
+          {userData?.bio}
+          </p>
+        </div>
+        <div className='flex gap-5'>
+          <p className='flex items-center gap-5 min-w-60'>
           <HiMail
             className='w-5 h-5 '
             style={{ color: 'rgb(60,109,121)' }}
           />
           {userData?.email}
         </p></div>
-        <div className='flex gap-5'>
-          <p className='flex items-center gap-5 min-w-60'>
-          <FaCircleInfo
-            className='w-4 h-4 ms-1'
-            style={{ color: 'rgb(60,109,121)' }}
-          />
-          {userData?.bio}
-          </p>
-        </div>
       </div>
         <div className=' mt-10 flex justify-center gap-3'>
-        <button className='px-5 py-2 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEdit}>Edit Profile</button>
-        <button className='px-5 py-2 border ' style={{borderColor:'rgb(60,109,121)'}}>Change Password</button>
+        <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEdit}>Edit Profile</button>
+        <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditPass}>Change Password</button>
+        <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditEmail}>Edit Email</button>
         </div>
 
       {isEditing && (
@@ -124,6 +170,22 @@ const Profile = () => {
           initialValue={userData}
         />
       )}
+
+    {isPassEditing && (
+        <EditPassPopup
+          onClose={() => setIsPassEditing(false)}
+          onSave={handleSavePass}
+          // initialValue={userData}
+        />
+      )}
+
+    {isEmailEditing && (
+            <EditEmailPopup
+              onClose={() => setIsEmailEditing(false)}
+              onSave={handleSavePass}
+              // initialValue={userData}
+            />
+          )}
 
 
       

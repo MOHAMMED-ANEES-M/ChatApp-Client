@@ -3,11 +3,14 @@ import './SignUp.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { errorToast, successToast, warnToast } from '../Components/Toast';
+import VerifyOtpPopup from '../Components/PopupEdit/VerifyOtpPopup';
+
 
 const SingnUp = () => {
 
   const [data,setData] = useState('')
-  const [confirmPass,setConfirmPass] = useState('')
+  const [userId,setUserId] = useState('')
+  const [isVerifyOTP,setIsVerifyOTP] = useState(false)
 
   const navigate = useNavigate()
 
@@ -17,36 +20,50 @@ const SingnUp = () => {
     setData({...data,[e.target.name]:e.target.value})
   }
 
-  const handleConfirmPass=(e)=>{
-    setConfirmPass(e.target.value)
-  }
-
   const handleSubmit=async(e)=>{
     e.preventDefault();
     try{
-      const { firstname, lastname, email ,password } = data
-      if( firstname || lastname || email || password ) {
-        if(confirmPass !== password){
-          console.log('pass');
-          warnToast('Password not matching')
-        } else {
-            let response = await axios.post('http://localhost:5000/api/users/register',data)
-            if (response.data) {
-              successToast('Registration Success')
-              navigate('login')
-            }
-        }
+      // const { firstname, lastname, email ,password, confirmpassword } = data
+
+      let response = await axios.post('http://localhost:5000/api/users/register',data)
+
+      if (response.data.success) {
+        console.log('register user',response);
+        setUserId(response.data.user._id)
+        successToast(response.data.message)
+        setIsVerifyOTP(true)
+      } 
         
-      }else{
-        warnToast('All fields are mandatory')
-        console.log('field');
-      }
     } catch(err){
       console.log(err);
       errorToast(err && err.response.data.message)
     }
   }
 
+  const handleVerifyEmail = async (editedValue) => {
+    try{
+      console.log('otp',editedValue);
+      const data = { otp: editedValue, id:userId }
+      let verifyOTP = await axios.post('http://localhost:5000/api/users/verify-registration', data,{
+        headers: {
+          Authorization: token
+        }
+      })
+      if (verifyOTP.data.success) {
+          console.log('verifyOTP',verifyOTP);
+          successToast('Registration Successfull')
+          setIsVerifyOTP(false)
+          navigate('login')
+      }      
+      
+    }catch(err){
+      setIsVerifyOTP(true)
+      console.log(err);
+      errorToast(err && err.response && err.response.data.message)
+
+    }
+
+  };
 
   useEffect(() => {
     try{
@@ -70,13 +87,22 @@ const SingnUp = () => {
             <input className='w-4/5' type="text" name='lastname' placeholder='Enter your lastname...' onChange={handleChange}/><br />
             <input className='w-4/5' type="text" name='email' placeholder='Enter your email...' onChange={handleChange}/><br />
             <input className='w-4/5' type="password" name='password' placeholder='Enter your password...' onChange={handleChange}/><br />
-            <input className='w-4/5' type="password" placeholder='Confirm password...' onChange={handleConfirmPass}/><br />
+            <input className='w-4/5' type="password" name='confirmpassword' placeholder='Confirm password...' onChange={handleChange}/><br />
             <input className='signup1-btn w-2/6 mt-5 mb-5' type="submit" value="Sign Up" />
         </form>
         <p>Don't have an account?  
           <Link to='login'><span className='ms-1 cursor-pointer'>Sign In</span></Link>
         </p>
       </div>
+
+
+      {isVerifyOTP && (
+                <VerifyOtpPopup
+                  onClose={() => setIsVerifyOTP(false)}
+                  onSave={handleVerifyEmail}
+                  // initialValue={userData}
+                />
+    )}
 
     </div>
   )

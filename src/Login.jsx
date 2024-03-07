@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { successToast, warnToast } from './Components/Toast'
+import { errorToast, successToast, warnToast } from './Components/Toast'
 import axios from 'axios'
+import VerifyOtpPopup from './Components/PopupEdit/VerifyOtpPopup';
+
 
 const Login = () => {
 
   const [data, setData] = useState('')
+  const [isVerifyOTP,setIsVerifyOTP] = useState(false)
+  const [emailVerified,setIsEmailVerified] = useState(false)
+
 
   const navigate = useNavigate()
 
@@ -18,27 +23,57 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const { password, email } = data
-      if (password && email) {
         const response = await axios.post('http://localhost:5000/api/users/login',data)
         if (response.data.success) {
+          console.log('email verified');
+          setIsEmailVerified(true)
           successToast(`Welcome ${response.data.user.firstname}`)
           localStorage.setItem('userId', response.data.user._id)
           localStorage.setItem('token', response.data.token)
           navigate('/userslist')
         }
-      } else {
-        warnToast('All fields are mandatory')
-      }
+        if (response.data.notVerified) {
+          setIsEmailVerified(false)
+          console.log('email not verified');
+          localStorage.setItem('userId', response.data.user._id)
+          localStorage.setItem('token', response.data.token)
+          warnToast(response.data.message)
+          setIsVerifyOTP(true)     
+        }
     } catch (err) {
       console.log(err);
-      warnToast(err && err.response.data.message)
+      warnToast(err && err.response && err.response.data.message)
     }
   }
 
+  const handleVerifyEmail = async (editedValue) => {
+    try{
+      console.log('otp',editedValue);
+      let verifyOTP = await axios.post('http://localhost:5000/api/users/verify-OTP',{otp: editedValue},{
+        headers: {
+          Authorization: token
+        }
+      })
+      if (verifyOTP.data.success) {
+        console.log('verifyOTP',verifyOTP);
+          successToast(verifyOTP.data.message)
+          setIsVerifyOTP(false)
+          navigate('/userslist')
+      }      
+      
+    }catch(err){
+      setIsVerifyOTP(true)
+      console.log(err);
+      errorToast(err && err.response && err.response.data.message)
+
+    }
+
+  };
+
+
   useEffect(() => {
     try{
-      if (token) {
+      if (token && emailVerified ) {
         navigate('/userslist')
       }
     } catch (err) {
@@ -60,6 +95,17 @@ const Login = () => {
           <Link to='/'><span className='ms-1 cursor-pointer'>Sign Up</span></Link>
         </p>
       </div>
+
+
+      
+      {isVerifyOTP && (
+                <VerifyOtpPopup
+                  onClose={() => setIsVerifyOTP(false)}
+                  onSave={handleVerifyEmail}
+                  // initialValue={userData}
+                />
+    )}
+
 
     </div>
   )

@@ -12,15 +12,18 @@ import ImageUpdatePopup from '../../Components/PopupEdit/ImageUpdatePopup';
 import EditPopup from '../../Components/PopupEdit/EditPopup';
 import EditPassPopup from '../../Components/PopupEdit/EditPassPopup';
 import EditEmailPopup from '../../Components/PopupEdit/EditEmailPopup';
+import VerifyOtpPopup from '../../Components/PopupEdit/VerifyOtpPopup';
 
 
 
 const Profile = () => {
   
   const [image, setImage] = useState('');
+  const [newEmail, setNewEmail] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isPassEditing, setIsPassEditing] = useState(false);
   const [isEmailEditing, setIsEmailEditing] = useState(false);
+  const [isVerifyOTP, setIsVerifyOTP] = useState(false);
   const [showImageConfirmation, setShowImageConfirmation] = useState(false);
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
@@ -89,15 +92,17 @@ const Profile = () => {
   const handleSaveEmail = async (editedValue) => {
     try{
       console.log('email',editedValue);
+      setNewEmail(editedValue)
       let sendOTP = await axios.post('http://localhost:5000/api/users/send-OTP',{email: editedValue},{
         headers: {
           Authorization: token
         }
       })
-      if (sendOTP) {
+      if (sendOTP.data.success) {
         console.log('sendOTP',sendOTP);
         setIsEmailEditing(false)
-        successToast('OTP sent successfully')
+        successToast(sendOTP.data.success)
+        setIsVerifyOTP(true)
       }      
       
     }catch(err){
@@ -105,8 +110,37 @@ const Profile = () => {
       console.log(err);
       errorToast(err && err.response && err.response.data.message)
 
-    } finally {
-      setIsEmailEditing(false)
+    } 
+  };
+
+  const handleVerifyEmail = async (editedValue) => {
+    try{
+      console.log('otp',editedValue);
+      let verifyOTP = await axios.post('http://localhost:5000/api/users/verify-OTP',{otp: editedValue},{
+        headers: {
+          Authorization: token
+        }
+      })
+      if (verifyOTP.data.success) {
+        console.log('verifyOTP',verifyOTP);
+        const response = await axios.put('http://localhost:5000/api/users/update-email', {email: newEmail}, {
+          headers: {
+            Authorization: token
+          }
+        })
+        if (response.data.success) {
+          console.log('update email res: ',response);
+          updateUser({ ...userData, newEmail });
+          successToast('Email updated successfully')
+          setIsVerifyOTP(false)
+        }
+      }      
+      
+    }catch(err){
+      setIsVerifyOTP(true)
+      console.log(err);
+      errorToast(err && err.response && err.response.data.message)
+
     }
 
   };
@@ -165,7 +199,7 @@ const Profile = () => {
       </div>
 
       <p className='font-semibold text-lg text-center mt-10'>{userData?.firstname} {userData?.lastname}</p>
-      <div className='w-1/6 m-auto mt-10'>
+      <div className='w-1/3 m-auto mt-10'>
         <div className='flex gap-5'>
           <p className='flex items-center gap-5 mb-5 min-w-60'>
           <FaCircleInfo
@@ -187,7 +221,7 @@ const Profile = () => {
         <div className=' mt-10 flex justify-center gap-3'>
         <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEdit}>Edit Profile</button>
         <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditPass}>Change Password</button>
-        <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditEmail}>Edit Email</button>
+        <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditEmail}>Update Email</button>
         </div>
 
       {isEditing && (
@@ -204,7 +238,7 @@ const Profile = () => {
           onSave={handleSavePass}
           // initialValue={userData}
         />
-      )}
+    )}
 
     {isEmailEditing && (
             <EditEmailPopup
@@ -212,7 +246,15 @@ const Profile = () => {
               onSave={handleSaveEmail}
               // initialValue={userData}
             />
-          )}
+    )}
+
+    {isVerifyOTP && (
+                <VerifyOtpPopup
+                  onClose={() => setIsVerifyOTP(false)}
+                  onSave={handleVerifyEmail}
+                  // initialValue={userData}
+                />
+    )}
 
 
       

@@ -69,11 +69,11 @@ const UsersList = () => {
   return (
     <div className='flex'>
 
-    <div>
+    <div className='w-[384px]'>
 
       <button className=' p-3 m-2 ' style={{ color: 'rgb(60,109,121)' }} onClick={() => setIsSidebarOpen(true)} ref={sidebarRef}><BsGrid1X2Fill className='w-7 h-7 sm:w-10 sm:h-10'/></button>
 
-      <div className={`h-full p-3 space-y-2 w-2/3 sm:w-96 dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
+      <div className={`h-full p-3 space-y-2 w-2/3 sm:w-[384px] dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
 
     <div class="flex items-center p-5 space-x-4 fixed top-0 left-0 border-b w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
     { userData.image ? (
@@ -91,7 +91,7 @@ const UsersList = () => {
 
     <div class="divide-y dark:divide-white ">
      
-      <ul class="pt-2 pb-4 space-y-1 text-sm mb-0 mt-0 custom-scroll " ref={userListRef} style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+      <ul class=" pt-2 pb-4 space-y-1 text-sm mb-0 mt-0 custom-scroll " ref={userListRef} style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
       {usersData.map((user) => (
               <li key={user._id} className='text-white cursor-pointer shadow p-5 rounded'>
                 {user.firstname} {user.lastname}

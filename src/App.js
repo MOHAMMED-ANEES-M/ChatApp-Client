@@ -7,6 +7,8 @@ import Navbar from './Components/Navbar/Navbar';
 import Profile from './Pages/Profile/Profile';
 import { UserProvider } from './context/UserContext';
 import Index from './Pages/Index';
+import ChatPage from './Pages/ChatPage/ChatPage';
+import ClientProfile from './Pages/ClientProfile/ClientProfile';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="userslist" element={<UsersList />} >
             <Route index element={<Index />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="chatpage/:clientId" element={<ChatPage />} />
+            <Route path="clientprofile/:clientId" element={<ClientProfile />} />
           </Route>
         </Route>
       </Routes>

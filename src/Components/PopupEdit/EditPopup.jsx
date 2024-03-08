@@ -40,14 +40,6 @@ const EditPopup = ({ onClose, onSave, initialValue }) => {
             onChange={handleChange}
           />
           <label className="block  text-sm mb-2">
-            Email:
-          </label>
-          <input
-            className="popup-input w-full p-2 bg-white border border-gray-300 rounded mb-5"
-            value={editedValue.email} name='email'
-            onChange={handleChange}
-          />
-          <label className="block  text-sm mb-2">
             Bio:
           </label>
           <input

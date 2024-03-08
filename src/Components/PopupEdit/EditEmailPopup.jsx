@@ -25,14 +25,14 @@ const EditPopup = ({ onClose, onSave }) => {
         <div className="mb-4">
           
           {/* <label className="block  text-sm mb-2">
-            Confirm New Password:
+            Email:
           </label> */}
           <input
             className="popup-input w-full p-2 bg-white border border-gray-300 rounded mb-5 placeholder:text-sm"
             name='email' type='email' placeholder='Enter your new email address...'
             onChange={handleChange}
           />
-          <p className='text-sm text-red-500 text-center'>OTP verification required to change email address</p>
+          <li className='text-sm text-red-500 list-disc ms-0'>OTP verification required to change email address</li>
           
         </div>
         <div className='text-end mt-10'>

@@ -13,6 +13,7 @@ import EditPopup from '../../Components/PopupEdit/EditPopup';
 import EditPassPopup from '../../Components/PopupEdit/EditPassPopup';
 import EditEmailPopup from '../../Components/PopupEdit/EditEmailPopup';
 import VerifyOtpPopup from '../../Components/PopupEdit/VerifyOtpPopup';
+import { BsCameraFill } from 'react-icons/bs';
 
 
 
@@ -183,15 +184,24 @@ const Profile = () => {
   return (
     <div>
 
-      <div className='w-1/6 m-auto mt-20 relative'>
+      <div className=' flex items-center justify-end gap-3 p-5 h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
+          <p className='text-white'>{userData?.firstname} {userData?.lastname}</p>
+          {userData?.image ? (
+              <img src={userData?.image} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
+            ) : (
+              <img src={profile} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
+          )}
+      </div>
+
+      <div className='w-fit m-auto mt-20 relative'>
         { userData.image ? (
           <img src={userData?.image} alt='profile' class="w-40 h-40 rounded-full dark:bg-gray-500 object-cover "/>
         ) : (
           <img src={profile} alt='profile' class="w-40 h-40 rounded-full dark:bg-gray-500 object-cover "/>
         )}
-        <div style={{ backgroundColor: 'rgb(60,109,121)' }} className='w-fit p-3 rounded-full absolute top-3/4 left-2/4'>
+        <div style={{ backgroundColor: 'rgb(60,109,121)' }} className='w-fit p-2 rounded-full absolute top-32 left-28'>
           <label htmlFor="fileInput" className="file-input-label">
-          <span ><FaUserEdit className='w-6 h-6 text-white cursor-pointer'/></span>
+          <span ><BsCameraFill className='w-5 h-5 text-white cursor-pointer'/></span>
           <input type="file" id="fileInput" className="hidden" onChange={handleImage}/>
           </label>
         </div>
@@ -218,7 +228,7 @@ const Profile = () => {
           {userData?.email}
         </p></div>
       </div>
-        <div className=' mt-10 flex justify-center gap-3'>
+        <div className=' mt-10 flex flex-wrap justify-center gap-3'>
         <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEdit}>Edit Profile</button>
         <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditPass}>Change Password</button>
         <button className='px-5 py-1 border ' style={{borderColor:'rgb(60,109,121)'}} onClick={handleEditEmail}>Update Email</button>

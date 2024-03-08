@@ -11,6 +11,7 @@ const UsersList = () => {
   const [usersData, setUsersData] = useState(['']);
   // const [profileData, setProfileData] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [clickedUserId, setClickedUserId] = useState(null);
   const sidebarRef = useRef(null);
   const userListRef = useRef(null); 
   const navigate = useNavigate()
@@ -75,7 +76,7 @@ const UsersList = () => {
 
       <div className={`h-full p-3 space-y-2 w-2/3 sm:w-[384px] dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
 
-    <div class="flex items-center p-5 space-x-4 fixed top-0 left-0 border-b w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
+    <div class="flex items-center p-5 space-x-4 fixed top-0 left-0 h-24 border-b border-r w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
     { userData.image ? (
       <img src={userData?.image} alt="profile" class="w-12 h-12 rounded-full dark:bg-gray-500 object-cover"/>
       ) : (
@@ -84,22 +85,30 @@ const UsersList = () => {
         <div>
         <h2 class="text-lg ">{userData?.firstname} {userData?.lastname}</h2>
         <span class="flex items-center space-x-1">
-          <Link to='profile'><a rel="noopener noreferrer" href="#" class="text-xs hover:underline dark:text-gray-400">View profile</a></Link>
+          <Link to='profile'><button onClick={() => setClickedUserId(null)} class="text-xs hover:underline dark:text-gray-400">View profile</button></Link>
         </span>
       </div>
     </div>
 
     <div class="divide-y dark:divide-white ">
      
-      <ul class=" pt-2 pb-4 space-y-1 text-sm mb-0 mt-0 custom-scroll " ref={userListRef} style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+    <ul className="pt-2 pb-0 space-y-1 text-sm mb-0 mt-0 custom-scroll" ref={userListRef} style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
       {usersData.map((user) => (
-              <li key={user._id} className='text-white cursor-pointer shadow p-5 rounded'>
-                {user.firstname} {user.lastname}
-              </li>      
+        <Link to={`chatpage/${user._id}`} 
+          key={user._id}
+          state={{ firstname: user.firstname, lastname: user.lastname, image: user.image }}
+          >
+           <li className={`text-white cursor-pointer shadow p-5  ${clickedUserId === user._id ? 'bg-regal-blue ' : ''}`}
+               onClick={() => setClickedUserId(user._id)}
+            >
+            {user.firstname} {user.lastname}
+          </li>
+        </Link>
       ))}
-      </ul>
+    </ul>
 
-      <ul class="p-5 py-3 space-y-1 text-sm fixed bottom-0 left-0 w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
+
+      <ul class="p-5 py-5 space-y-1 text-sm fixed bottom-0 left-0 w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
         <li>
           <button onClick={handleLogout} className='signout-btn p-3 w-24'>Logout</button>
         </li>

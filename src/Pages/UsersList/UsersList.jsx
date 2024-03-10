@@ -74,7 +74,7 @@ const UsersList = () => {
 
       <button className=' p-3 m-2 ' style={{ color: 'rgb(60,109,121)' }} onClick={() => setIsSidebarOpen(true)} ref={sidebarRef}><BsGrid1X2Fill className='w-7 h-7 sm:w-10 sm:h-10'/></button>
 
-      <div className={`h-full p-3 space-y-2 w-2/3 sm:w-[384px] dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
+      <div className={`h-[590px] p-3 space-y-2 w-2/3 sm:w-[384px] dark:text-gray-100 lg:block ${isSidebarOpen ? "block" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
 
     <div class="flex items-center p-5 space-x-4 fixed top-0 left-0 h-24 border-b border-r w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>
     { userData.image ? (
@@ -93,19 +93,24 @@ const UsersList = () => {
     <div class="divide-y dark:divide-white ">
      
     <ul className="pt-2 pb-0 space-y-1 text-sm mb-0 mt-0 custom-scroll" ref={userListRef} style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
-      {usersData.map((user) => (
-        <Link to={`chatpage/${user._id}`} 
-          key={user._id}
-          state={{ firstname: user.firstname, lastname: user.lastname, image: user.image }}
-          >
-           <li className={`text-white cursor-pointer shadow p-5  ${clickedUserId === user._id ? 'bg-regal-blue ' : ''}`}
-               onClick={() => setClickedUserId(user._id)}
-            >
-            {user.firstname} {user.lastname}
-          </li>
-        </Link>
-      ))}
-    </ul>
+  <>
+  {usersData.map((user) => (
+    <Link to={`chatpage/${user._id}`} key={user._id} state={{ firstname: user.firstname, lastname: user.lastname, image: user.image }}>
+      <div className={`w-full flex gap-x-3 items-center hover:bg-regal-lightblue p-4 mb-1 ${clickedUserId === user._id ? 'bg-regal-blue ' : ''}`} onClick={() => setClickedUserId(user._id)}>
+        { user.image ? (
+          <img src={user?.image} alt="profile" className="w-10 h-10 rounded-full dark:bg-gray-500 object-cover"/>
+        ) : (
+          <img src={profile} alt="profile" className="w-10 h-10 rounded-full dark:bg-gray-500 object-cover"/>
+        )}
+        <li className={`text-white cursor-pointer`}>
+          {user.firstname} {user.lastname}
+        </li>
+      </div>
+    </Link>
+  ))}
+  </>
+</ul>
+
 
 
       <ul class="p-5 py-5 space-y-1 text-sm fixed bottom-0 left-0 w-2/3 sm:w-[384px]" style={{backgroundColor: 'rgb(60,109,121)'}}>

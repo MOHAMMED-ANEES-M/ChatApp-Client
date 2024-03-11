@@ -9,11 +9,13 @@ import { UserProvider } from './context/UserContext';
 import Index from './Pages/Index';
 import ChatPage from './Pages/ChatPage/ChatPage';
 import ClientProfile from './Pages/ClientProfile/ClientProfile';
+import { NewMessageProvider } from './context/ChatProvider';
 
 function App() {
   return (
     <div className="App">
 
+    <NewMessageProvider>
     <UserProvider>
     <BrowserRouter>
       <Routes>
@@ -30,6 +32,7 @@ function App() {
       </Routes>
     </BrowserRouter>
     </UserProvider>
+    </NewMessageProvider>
 
     </div>
   );

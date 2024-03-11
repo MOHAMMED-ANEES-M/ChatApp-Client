@@ -5,9 +5,13 @@ import { BsGrid1X2Fill } from "react-icons/bs";
 import './UsersList.css'
 import { useUser } from '../../context/UserContext';
 import profile from '../../assets/images.png'
+import { AiOutlineAlert } from "react-icons/ai"; // Add the alert icon
+import { useNewMessageContext } from '../../context/ChatProvider';
+
 
 
 const UsersList = () => {
+  const { newMessageAlert, updateNewMessageAlert } = useNewMessageContext();
   const [usersData, setUsersData] = useState(['']);
   // const [profileData, setProfileData] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,12 +30,16 @@ const UsersList = () => {
     window.location.reload();
 }
 
+
+
   useEffect(() => {
 
     if (!token) {
       return navigate('/login')
     }
     setFetchAgain(true)
+
+    console.log('new mesg alert',newMessageAlert);
     
     const fetchUsersData = async () => {
       try {
@@ -85,7 +93,11 @@ const UsersList = () => {
         <div>
         <h2 class="text-lg ">{userData?.firstname} {userData?.lastname}</h2>
         <span class="flex items-center space-x-1">
-          <Link to='profile'><button onClick={() => setClickedUserId(null)} class="text-xs hover:underline dark:text-gray-400">View profile</button></Link>
+          <Link to='profile'>
+          <button onClick={() => { setClickedUserId(null); updateNewMessageAlert(false); }} class="text-xs hover:underline dark:text-gray-400">
+                    View profile
+                  </button>          
+          </Link>
         </span>
       </div>
     </div>
@@ -103,8 +115,9 @@ const UsersList = () => {
           <img src={profile} alt="profile" className="w-10 h-10 rounded-full dark:bg-gray-500 object-cover"/>
         )}
         <li className={`text-white cursor-pointer`}>
-          {user.firstname} {user.lastname}
-        </li>
+                        {user.firstname} {user.lastname}
+                        {newMessageAlert && <AiOutlineAlert className="ml-1 text-yellow-500" />} {/* Display alert icon */}
+                      </li>
       </div>
     </Link>
   ))}

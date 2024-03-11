@@ -4,6 +4,7 @@ import profile from '../../assets/images.png'
 import io from 'socket.io-client';
 import { IoSend } from 'react-icons/io5';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import { useNewMessageContext } from '../../context/ChatProvider';
 
 
 const socket = io('http://localhost:5000', {
@@ -17,6 +18,7 @@ const ChatPage = () => {
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const { newMessageAlert, updateNewMessageAlert } = useNewMessageContext();
     const messagesEndRef = useRef(null);
     const navigate = useNavigate()
 
@@ -37,7 +39,7 @@ const ChatPage = () => {
               to: `room_${clientId}_${userId}`,
               message: newMessage, 
               customerId: userId, 
-              timestamb: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
+              createdAt: new Date()
               }
   
               socket.emit('sendMessage', messageData);
@@ -45,7 +47,6 @@ const ChatPage = () => {
               setMessages(prevMessages => [...prevMessages, messageData]);
               setNewMessage('');
               console.log('messages', messages);
-  
           }
         };
 
@@ -75,7 +76,8 @@ const ChatPage = () => {
           socket.on('recieveMessage', (data) => {
             console.log('recieveMessage',data);
               setMessages(prevMessages => [...prevMessages, data]);
-          });
+              updateNewMessageAlert(true);
+            });
       
           return () => {
             socket.off('loadMessages');
@@ -100,13 +102,14 @@ const ChatPage = () => {
         {messages.map((message, index) => (
           <div key={index} className={` text-white p-2 w-fit max-w-48 sm:max-w-60  md:max-w-64 lg:max-w-[45%] xl:max-w-[55%] min-w-20 lg:min-w-32  mt-2 break-all  ${message.customerId === clientId ? 'bg-regal-blue' : 'bg-regal-darkblue  ml-auto'}`}>
             <p>{message.message}</p>
-              {/* <p className='text-end text-xs'>
-                  {message.timestamb}
-              </p> */}
+            <p className='text-end text-xs'>
+                { new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) }
+            </p>
           </div>
         ))}
         <div ref={messagesEndRef} />
         </ScrollToBottom>
+
       <div className='w-[97%] m-auto shadow border-2 flex gap-x-3 items-center'>
       <input
         className='min-[220px]:w-9/12 min-[320px]:w-[94%] py-3 ps-3 focus:outline-none'

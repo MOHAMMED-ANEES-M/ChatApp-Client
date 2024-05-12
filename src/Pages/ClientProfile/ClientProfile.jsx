@@ -44,23 +44,23 @@ const ClientProfile = () => {
   return (
     <div>
 
-      <div className=' flex items-center justify-end gap-3 p-5 h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
-      <p className='text-white'>{clientData.firstname} {clientData.lastname}</p>
+      <div className=' flex items-center justify-between gap-3 sm:px-10 p-3 sm:p-5 h-14 sm:h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
+      <p className='text-white ps-10 sm:ps-0'>{clientData.firstname} {clientData.lastname}</p>
             {clientData.image === undefined ? (
-                <img src={profile} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
+                <img src={profile} alt="User" className='w-7 h-7 sm:w-10 sm:h-10 rounded-full dark:bg-gray-500 object-cover ' />
             ) : (
-                <img src={clientData.image} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
+                <img src={clientData.image} alt="User" className='w-7 h-7 sm:w-10 sm:h-10 rounded-full dark:bg-gray-500 object-cover ' />
             )}
         </div>
 
-        <div className='w-fit m-auto mt-20'>
+        <div className='w-fit m-auto mt-10 sm:mt-20'>
             {clientData.image === undefined ? (
-                <img src={profile} alt="User" className='w-40 h-40 rounded-full dark:bg-gray-500 object-cover ' />
+                <img src={profile} alt="User" className='w-20 h-20 sm:w-40 sm:h-40 rounded-full dark:bg-gray-500 object-cover ' />
             ) : (
-                <img src={clientData.image} alt="User" className='w-40 h-40 rounded-full dark:bg-gray-500 object-cover ' />
+                <img src={clientData.image} alt="User" className='w-20 h-20 sm:w-40 sm:h-40 rounded-full dark:bg-gray-500 object-cover ' />
             )}
         </div>
-        <p className='font-semibold text-lg text-center mt-5'>{clientData.firstname} {clientData.lastname}</p>
+        <p className='font-semibold sm:text-lg text-center mt-5'>{clientData.firstname} {clientData.lastname}</p>
         <p className=' text-center mt-5'>{clientData.bio}</p>
         <p className=' text-center mt-2'>{clientData.email}</p>
         <div className="w-fit m-auto mt-10">

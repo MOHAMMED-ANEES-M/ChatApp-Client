@@ -4,13 +4,7 @@ import profile from '../../assets/images.png'
 import io from 'socket.io-client';
 import { IoSend } from 'react-icons/io5';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import { useNewMessageContext } from '../../context/ChatProvider';
-
-
-const socket = io('http://localhost:5000', {
-    pingInterval: 10000,
-    pingTimeout: 5000,
-});
+import { useNewMessageContext, socket } from '../../context/ChatProvider'; 
 
 
 
@@ -18,7 +12,7 @@ const ChatPage = () => {
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const { newMessageAlert, updateNewMessageAlert } = useNewMessageContext();
+    const { newMessageAlert, updateNewMessageAlert, lastSenderId, updateLastSenderId } = useNewMessageContext();
     const messagesEndRef = useRef(null);
     const navigate = useNavigate()
 
@@ -38,7 +32,8 @@ const ChatPage = () => {
               role: 'User', 
               to: `room_${clientId}_${userId}`,
               message: newMessage, 
-              customerId: userId, 
+              customerId: userId,
+              clientId:clientId, 
               createdAt: new Date()
               }
   
@@ -62,7 +57,11 @@ const ChatPage = () => {
           }
 
           scrollToBottom()
-  
+          console.log('update', clientId, lastSenderId);
+          if (clientId === lastSenderId) {
+            updateNewMessageAlert(false);
+          }
+          
           console.log('chat');
           socket.connect()
           socket.emit('joinRoom', {room: `room_${userId}_${clientId}`, to: `room_${clientId}_${userId}`, hint: `${userId} connected` });
@@ -76,8 +75,9 @@ const ChatPage = () => {
           socket.on('recieveMessage', (data) => {
             console.log('recieveMessage',data);
               setMessages(prevMessages => [...prevMessages, data]);
-              updateNewMessageAlert(true);
-            });
+              updateNewMessageAlert(false);
+              updateLastSenderId(data.customerId);
+          });
       
           return () => {
             socket.off('loadMessages');
@@ -85,20 +85,20 @@ const ChatPage = () => {
             socket.off('sendMessage');
             socket.disconnect()
           };
-        }, [clientId, token, userId, navigate]);
+        }, [clientId, token, userId, navigate, newMessageAlert]);
 
   return (
-    <div>
-        <div className=' flex items-center justify-end gap-3 p-5 h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
-            <p className='text-white'>{clientData?.firstname} {clientData?.lastname}</p>
+    <div className='h-[100vh] fixed w-full sm:w-fit'>
+        <div className='w-full flex items-center justify-between gap-3 sm:px-10 p-3 sm:p-5 h-14 sm:h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
+            <p className='text-white ps-10 sm:ps-0'>{clientData?.firstname} {clientData?.lastname}</p>
             {clientData?.image === undefined ? (
-                <Link to={`/userslist/clientprofile/${clientId}`}><img src={profile} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' /></Link>
+                <Link to={`/userslist/clientprofile/${clientId}`}><img src={profile} alt="User" className='w-7 h-7 sm:w-10 sm:h-10 rounded-full dark:bg-gray-500 object-cover ' /></Link>
             ) : (
-                <Link to={`/userslist/clientprofile/${clientId}`}><img src={clientData.image} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' /></Link>
+                <Link to={`/userslist/clientprofile/${clientId}`}><img src={clientData.image} alt="User" className='w-7 h-7 sm:w-10 sm:h-10 rounded-full dark:bg-gray-500 object-cover ' /></Link>
             )}
         </div>
 
-        <ScrollToBottom className='h-[530px] overflow-scroll p-5 bg-green-50 custom-scroll'>
+        <ScrollToBottom className='h-[75%] overflow-scroll p-5 bg-green-50 custom-scroll'>
         {messages.map((message, index) => (
           <div key={index} className={` text-white p-2 w-fit max-w-48 sm:max-w-60  md:max-w-64 lg:max-w-[45%] xl:max-w-[55%] min-w-20 lg:min-w-32  mt-2 break-all  ${message.customerId === clientId ? 'bg-regal-blue' : 'bg-regal-darkblue  ml-auto'}`}>
             <p>{message.message}</p>

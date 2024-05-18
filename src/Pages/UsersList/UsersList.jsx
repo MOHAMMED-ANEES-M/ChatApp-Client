@@ -22,12 +22,12 @@ const UsersList = () => {
   const sidebarRef = useRef(null);
   const userListRef = useRef(null); 
   const navigate = useNavigate()
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('chatToken');
   const userId = localStorage.getItem('userId');
   const {userData, setFetchAgain} = useUser()
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('chatToken');
     localStorage.removeItem('userId');
     navigate('/login');
     window.location.reload();
@@ -125,9 +125,9 @@ const UsersList = () => {
     <div className='w-[384px]' >
 
       { isSidebarOpen ? (
-        <button className=' p-3 m-2 fixed top-0 right-0 z-20 sm:hidden' style={{ color: 'white' }} onClick={() => setIsSidebarOpen(false)}><GrClose className='w-4 h-4 sm:w-10 sm:h-10'/></button>
+        <button className=' p-3 m-2 fixed top-0 right-0 z-20 md:hidden' style={{ color: 'white' }} onClick={() => setIsSidebarOpen(false)}><GrClose className='w-5 h-5 sm:w-7 sm:h-7'/></button>
       ) : (        
-        <button className=' p-3 m-2 fixed top-0 left-0 z-20 sm:hidden' style={{ color: 'white' }} onClick={() => setIsSidebarOpen(true)}><TfiMenu className='w-4 h-4 sm:w-10 sm:h-10'/></button>
+        <button className=' p-3 m-2 fixed top-0 left-0 z-20 md:hidden' style={{ color: 'white' }} onClick={() => setIsSidebarOpen(true)}><TfiMenu className='w-4 h-4 md:w-7 md:h-7'/></button>
       )}
 
       <div className={` mt-20 p-3 space-y-2 w-4/5  sm:w-[384px] dark:text-gray-100 md:block ${isSidebarOpen ? "block fixed z-50" : "hidden"}`} style={{ backgroundColor: 'rgb(60,109,121)' }} ref={sidebarRef}>
@@ -152,7 +152,7 @@ const UsersList = () => {
 
     <div class="divide-y dark:divide-white " style={{backgroundColor: 'rgb(60,109,121)'}}>
      
-    <ul className="pt-2 pb-0 space-y-1 text-sm mb-0 mt-0 max-h-[400px] overflow-y-auto">
+    <ul className="pt-2 pb-0 space-y-1 text-sm mb-0 mt-0 max-h-[435px] overflow-y-auto no-scrollbar">
   <>
   {sortedUsers.map((user) => (
     <Link to={`chatpage/${user._id}`} key={user._id} state={{ firstname: user.firstname, lastname: user.lastname, image: user.image }}>
@@ -185,7 +185,7 @@ const UsersList = () => {
 
   </div>
 
-  <div className={` ${isSidebarOpen && 'blur'}`}>
+  <div className={` ${isSidebarOpen && 'blur'} md:w-[73%] `}>
     <Outlet />
   </div>
 

@@ -12,7 +12,7 @@ const ClientProfile = () => {
     const [clientData, setClientData] = useState('')
     const navigate = useNavigate()
     const { clientId } = useParams()
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('chatToken')
 
 
     useEffect(() => {
@@ -44,8 +44,8 @@ const ClientProfile = () => {
   return (
     <div>
 
-      <div className=' flex items-center justify-between gap-3 sm:px-10 p-3 sm:p-5 h-14 sm:h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
-      <p className='text-white ps-10 sm:ps-0'>{clientData.firstname} {clientData.lastname}</p>
+      <div className=' flex items-center justify-between gap-3 md:px-10 p-3 sm:p-5 h-14 md:h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
+      <p className='text-white ps-10 md:ps-0'>{clientData.firstname} {clientData.lastname}</p>
             {clientData.image === undefined ? (
                 <img src={profile} alt="User" className='w-7 h-7 sm:w-10 sm:h-10 rounded-full dark:bg-gray-500 object-cover ' />
             ) : (

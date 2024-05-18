@@ -27,7 +27,7 @@ const Profile = () => {
   const [isVerifyOTP, setIsVerifyOTP] = useState(false);
   const [showImageConfirmation, setShowImageConfirmation] = useState(false);
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('chatToken')
   const { userData, updateUser, setFetchAgain } = useUser();
 
   const handleEdit = () => {
@@ -209,8 +209,8 @@ const Profile = () => {
       </div>
 
       <p className='font-semibold text-lg text-center mt-10'>{userData?.firstname} {userData?.lastname}</p>
-      <div className='w-1/3 m-auto mt-10'>
-        <div className='flex gap-5'>
+      <div className='w-4/6 m-auto mt-10 '>
+        <div className='flex gap-5 m-auto w-fit'>
           <p className='flex items-center gap-5 mb-5 min-w-60'>
           <FaCircleInfo
             className='w-4 h-4'
@@ -219,7 +219,7 @@ const Profile = () => {
           {userData?.bio}
           </p>
         </div>
-        <div className='flex gap-5'>
+        <div className='flex gap-5 m-auto w-fit ps-4'>
           <p className='flex items-center gap-5 min-w-60'>
           <HiMail
             className='w-5 h-5 '

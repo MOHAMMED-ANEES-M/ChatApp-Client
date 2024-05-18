@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState('');
   const [refresh, setRefresh] = useState(false);
   const [fetchAgain, setFetchAgain] = useState(false); 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('chatToken');
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {

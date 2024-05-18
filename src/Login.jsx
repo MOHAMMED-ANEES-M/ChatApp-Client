@@ -14,7 +14,7 @@ const Login = () => {
 
   const navigate = useNavigate()
 
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('chatToken')
 
   const handleChange = (e) => {
     setData({...data,[e.target.name]: e.target.value})
@@ -29,7 +29,7 @@ const Login = () => {
           setIsEmailVerified(true)
           successToast(`Welcome ${response.data.user.firstname}`)
           localStorage.setItem('userId', response.data.user._id)
-          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('chatToken', response.data.token)
           navigate('/userslist')
         }
         if (response.data.notVerified) {

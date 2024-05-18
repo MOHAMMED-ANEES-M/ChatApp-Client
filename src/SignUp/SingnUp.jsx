@@ -14,7 +14,7 @@ const SingnUp = () => {
 
   const navigate = useNavigate()
 
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('chatToken')
 
   const handleChange =(e)=>{
     setData({...data,[e.target.name]:e.target.value})

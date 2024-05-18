@@ -8,7 +8,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 
         const navigate = useNavigate()
 
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('chatToken')
 
         const toggleMobileMenu = () => {
             setMenuOpen(!isMenuOpen);
@@ -33,7 +33,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
               <a href="#" className="text-white hover:text-gray-300">About</a>
               <a href="#" className="text-white hover:text-gray-300">Contact</a>
             </div> */}
-            <div className="hidden md:flex space-x-4 text-white">
+            <div className="hidden sm:flex space-x-4 text-white">
               { token ? (
                  <button className='signout-btn p-3 w-24' onClick={handleSignout}>Sign Out</button>
               ) : (
@@ -43,7 +43,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
                 </>
               )} 
             </div>
-            <div className="md:hidden">
+            <div className="sm:hidden">
               {/* Mobile menu button */}
               <button className="text-white p-2 focus:outline-none" onClick={toggleMobileMenu}>
                 <svg
@@ -63,7 +63,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
           </div>
           {/* Mobile menu */}
           {isMenuOpen && (
-          <div className="md:hidden text-white p-4 mt-10">
+          <div className="sm:hidden text-white p-4 mt-10">
             {/* <a href="#" className="block mb-2">
               About
             </a>

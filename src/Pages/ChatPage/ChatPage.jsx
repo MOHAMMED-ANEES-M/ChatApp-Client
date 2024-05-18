@@ -20,7 +20,7 @@ const ChatPage = () => {
     const location = useLocation();
     const clientData = location.state
     const userId = localStorage.getItem('userId')
-    const token = localStorage.getItem('token')  
+    const token = localStorage.getItem('chatToken')  
 
 
     const handleSendMessage = () => {
@@ -88,9 +88,9 @@ const ChatPage = () => {
         }, [clientId, token, userId, navigate, newMessageAlert]);
 
   return (
-    <div className='h-[100vh] fixed w-full sm:w-fit'>
-        <div className='w-full flex items-center justify-between gap-3 sm:px-10 p-3 sm:p-5 h-14 sm:h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
-            <p className='text-white ps-10 sm:ps-0'>{clientData?.firstname} {clientData?.lastname}</p>
+    <div className='h-[100vh] fixed w-full md:w-[63%] lg:w-[73%] '>
+        <div className='w-full flex items-center justify-between gap-3 md:px-10 p-3 md:p-5 h-14 md:h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
+            <p className='text-white ps-10 md:ps-0'>{clientData?.firstname} {clientData?.lastname}</p>
             {clientData?.image === undefined ? (
                 <Link to={`/userslist/clientprofile/${clientId}`}><img src={profile} alt="User" className='w-7 h-7 sm:w-10 sm:h-10 rounded-full dark:bg-gray-500 object-cover ' /></Link>
             ) : (

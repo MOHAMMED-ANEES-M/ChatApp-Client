@@ -145,6 +145,7 @@ const Profile = () => {
     }
 
   };
+  
 
   const handleImage = async (e) => {
     try {
@@ -187,7 +188,7 @@ const Profile = () => {
       <div className=' flex items-center justify-end gap-3 p-5 h-24' style={{backgroundColor: "rgb(60,109,121)"}}>
           <p className='text-white'>{userData?.firstname} {userData?.lastname}</p>
           {userData?.image ? (
-              <img src={userData?.image} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
+              <img src={userData?.image} alt={"User"} className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
             ) : (
               <img src={profile} alt="User" className='w-10 h-10 rounded-full dark:bg-gray-500 object-cover ' />
           )}

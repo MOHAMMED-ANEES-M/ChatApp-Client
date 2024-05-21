@@ -24,13 +24,18 @@ const UsersList = () => {
   const navigate = useNavigate()
   const token = localStorage.getItem('chatToken');
   const userId = localStorage.getItem('userId');
-  const {userData, setFetchAgain} = useUser()
+  const {userData, setFetchAgain, fetchAgain, logout} = useUser()
 
   const handleLogout = () => {
-    localStorage.removeItem('chatToken');
-    localStorage.removeItem('userId');
-    navigate('/login');
-    window.location.reload();
+    try{
+      localStorage.removeItem('chatToken');
+      localStorage.removeItem('userId');
+      logout()
+      navigate('/login');
+      window.location.reload();
+    } catch(err) {
+      console.log(err);
+    }
 }
 
 
@@ -39,7 +44,7 @@ const UsersList = () => {
     if (!token) {
       return navigate('/login')
     }
-    setFetchAgain(true)
+    setFetchAgain(!fetchAgain)
 
     console.log('new mesg alert',newMessageAlert);
     
@@ -114,9 +119,9 @@ const UsersList = () => {
     }
   }, [newMessageAlert, lastSenderId, sortedUsers]);
 
-  if (sortedUsers.length === 0) {
-    return <div>Loading...</div>;
-  }
+  // if (sortedUsers.length === 0) {
+  //   return <div>Loading...</div>;
+  // }
 
 
   return (

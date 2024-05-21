@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { errorToast, successToast, warnToast } from './Components/Toast'
 import axios from 'axios'
 import VerifyOtpPopup from './Components/PopupEdit/VerifyOtpPopup';
+import google from './assets/Google.png'
+import { useUser } from './context/UserContext';
 
 
 const Login = () => {
@@ -11,10 +13,29 @@ const Login = () => {
   const [isVerifyOTP,setIsVerifyOTP] = useState(false)
   const [emailVerified,setIsEmailVerified] = useState(false)
 
-
   const navigate = useNavigate()
-
   const token = localStorage.getItem('chatToken')
+  const { googleSignIn } = useUser()
+
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const googleUserData = await googleSignIn()        
+      console.log('google userData signin: ',googleUserData);
+        let response = await axios.post('http://localhost:5000/api/users/google-register',googleUserData)
+        if (response.data.success) {
+          localStorage.setItem('userId', response.data.user._id)
+          localStorage.setItem('chatToken', response.data.token)
+          successToast(`Welcome ${response.data.user.firstname}`)
+          console.log('google signin res: ',response);
+          navigate('/userslist')
+        }
+      } catch(err) {
+        console.log(err);
+        errorToast(err && err?.response?.data?.message)
+      }
+  }
+
 
   const handleChange = (e) => {
     setData({...data,[e.target.name]: e.target.value})
@@ -79,12 +100,12 @@ const Login = () => {
     } catch (err) {
       console.log(err);
     }
-  })
+  },[token])
 
   return (
     <div>
       
-      <div className='signup w-1/3 m-auto text-center text-white mt-20  p-10 '>
+      <div className='signup w-1/3 m-auto text-center text-white mt-10 mb-5  p-10 '>
         <h1 className='text-4xl mb-16'>Sign In</h1>
         <form className='text-center' onSubmit={handleSubmit}>
             <input className='w-4/5' type="text" name='email' placeholder='Enter your email...' onChange={handleChange}/><br />
@@ -94,16 +115,25 @@ const Login = () => {
         <p>Don't have an account?  
           <Link to='/'><span className='ms-1 cursor-pointer'>Sign Up</span></Link>
         </p>
+        <div className='flex items-center justify-center gap-3 mt-10 '>
+          <hr className='w-[50%] border-[#f9ae65]'/>
+          <p>or</p>
+          <hr className='w-[50%] border-[#f9ae65]'/>
+        </div>
+        <button className='flex items-center gap-2 border border-[#f9ae65] p-3 m-auto mt-10 signup1-btn' onClick={handleGoogleSignIn}>
+          <img src={google} alt="" className='w-5 h-5'/>
+          Continue with Google
+        </button>
       </div>
 
 
       
-      {isVerifyOTP && (
-                <VerifyOtpPopup
-                  onClose={() => setIsVerifyOTP(false)}
-                  onSave={handleVerifyEmail}
-                  // initialValue={userData}
-                />
+    { isVerifyOTP && (
+      <VerifyOtpPopup
+        onClose={() => setIsVerifyOTP(false)}
+        onSave={handleVerifyEmail}
+        // initialValue={userData}
+      />
     )}
 
 

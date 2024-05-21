@@ -22,7 +22,7 @@ input:focus {
     background-color: rgb(249,174,101) !important;
 }
 .signup span {
-    color: rgb(249,174,101);
+    color: rgb(249, 174, 101);
 }
 .signup span:hover {
     font-style: italic;

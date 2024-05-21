@@ -1,24 +1,31 @@
 import React, { useState } from 'react'
 import './Navbar.css'
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
+
 
     const Navbar = () => {
 
         const [isMenuOpen, setMenuOpen] = useState(false);
 
         const navigate = useNavigate()
-
         const token = localStorage.getItem('chatToken')
+        const { logout } = useUser()
 
         const toggleMobileMenu = () => {
             setMenuOpen(!isMenuOpen);
         };
 
         const handleSignout = () => {
+          try {
             localStorage.removeItem('token');
             localStorage.removeItem('userId');
+            logout()
             navigate('/login');
             window.location.reload();
+          } catch (err) {
+            console.log(err);
+          }
         }
 
 

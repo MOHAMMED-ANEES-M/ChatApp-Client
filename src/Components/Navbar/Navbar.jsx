@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './Navbar.css'
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
-
+import logo from '../../assets/KinChatLogo.png'
 
     const Navbar = () => {
 
@@ -34,7 +34,10 @@ import { useUser } from '../../context/UserContext';
            <nav className={`  ${token ? 'hidden' : 'nav-div p-4'}`}>
           <div className="container mx-auto flex items-center justify-between px-4">
             <div className="text-white font-bold text-lg">
-              ChatApp
+              <Link to='/'>
+                <div className='flex gap-2 items-center'>
+                  <img src={logo} alt="" className='w-5 h-5'/>KinChat
+                  </div></Link>
             </div>
             {/* <div className="hidden md:flex space-x-4">
               <a href="#" className="text-white hover:text-gray-300">About</a>

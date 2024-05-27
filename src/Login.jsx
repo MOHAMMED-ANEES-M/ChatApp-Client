@@ -105,14 +105,14 @@ const Login = () => {
   return (
     <div>
       
-      <div className='signup w-1/3 m-auto text-center text-white mt-10 mb-5  p-10 '>
-        <h1 className='text-4xl mb-16'>Sign In</h1>
+      <div className='signup w-[80%] sm:w-[70%] md:w-[50%] lg:w-[35%] m-auto text-center text-white mt-10 mb-10 p-5 sm:p-10 '>
+        <h1 className='text-2xl sm:text-4xl mb-16'>Sign In</h1>
         <form className='text-center' onSubmit={handleSubmit}>
-            <input className='w-4/5' type="text" name='email' placeholder='Enter your email...' onChange={handleChange}/><br />
-            <input className='w-4/5' type="password" name='password' placeholder='Enter your password...' onChange={handleChange}/><br />
-            <input className='signup1-btn w-2/6 mt-5 mb-10' type="submit" value="Sign In" />
+            <input className='w-10/12 sm:w-4/5 placeholder:text-sm' type="text" name='email' placeholder='Enter email' onChange={handleChange}/><br />
+            <input className='w-10/12 sm:w-4/5 placeholder:text-sm' type="password" name='password' placeholder='Enter password' onChange={handleChange}/><br />
+            <input className='signup1-btn w-3/6 sm:w-2/6 mt-5 mb-10' type="submit" value="Sign In" />
         </form>
-        <p>Don't have an account?  
+        <p className='text-xs sm:text-base'>Don't have an account?  
           <Link to='/'><span className='ms-1 cursor-pointer'>Sign Up</span></Link>
         </p>
         <div className='flex items-center justify-center gap-3 mt-10 '>
@@ -120,7 +120,7 @@ const Login = () => {
           <p>or</p>
           <hr className='w-[50%] border-[#f9ae65]'/>
         </div>
-        <button className='flex items-center gap-2 border border-[#f9ae65] p-3 m-auto mt-10 signup1-btn' onClick={handleGoogleSignIn}>
+        <button className='flex items-center text-sm sm:text-base gap-2 border border-[#f9ae65] p-2 sm:p-3 m-auto mt-10 signup1-btn' onClick={handleGoogleSignIn}>
           <img src={google} alt="" className='w-5 h-5'/>
           Continue with Google
         </button>
